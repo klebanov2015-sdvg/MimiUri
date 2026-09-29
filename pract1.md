@@ -37,8 +37,12 @@ Console.WriteLine(c2); // 2
 divmod(7, 3) возвращает (2, 1)
 ```
 ```
-
-
-
-
+1.4. C приведенным ниже циклом что-то не так. Как это исправить?
+from decimal import Decimal
+a = Decimal("10")
+summator = 0
+while a != 0:
+    a -= Decimal("0.1")
+    summator +=1
+print(summator)
 ```
