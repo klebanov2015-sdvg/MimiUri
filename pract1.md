@@ -1,7 +1,6 @@
 ## Безумно можно кодить
-Пишу на C#
 
-
+1. Знакомство с языком
 ```
 1. Запишите число 42 с помощью 10 различных способов, чем разнообразнее, тем лучше. Использовать литеральную запись, без арифметики и функций. В любом варианте должно соблюдаться == 42.
 
@@ -78,4 +77,173 @@ x = 5
 1 < (x < 10)
 False
 Ответ: потому что в первом примере происходит последовательное сравнение, получается true and true,  а во втором примере сначала в скобках true = 1, вне скобок тоже true = 1 после чего идет сравнение 1<1 = false
+```
+2. Сообщения об ошибках
+```
+2.1
+SyntaxError: invalid syntax - в c# если после значения переменной не поставить ";"/ в python - elsee:	Опечатка в ключевом слове else
+```
+```
+2.2
+SyntaxError: cannot assign to literal - 10 = x	Перепутаны местами: переменная должна быть слева, значение — справа
+```
+```
+2.3. NameError: name ... is not defined - Опечатка в имени	pritn("hi")	Написано pritn, а функция называется print
+```
+```
+2.4 SyntaxError: unterminated string literal - Забыта закрывающая кавычка	s = "hello	Открыта ", но нет закрывающей "
+```
+```
+2.5 TypeError: unsupported operand type(s) for ... - Смешивание типов в арифметике	5 + "10"	Нельзя сложить число и строку без явного преобразования
+```
+```
+2.6 IndentationError: expected an indented block -
+if x > 0:
+print("positive")	Нет отступа после if
+```
+```
+2.7 IndentationError: unindent does not match any outer indentation level - «уменьшение отступа не совпадает ни с одним внешним уровнем». Причина: строка имеет отступ, не соответствующий ни одному из существующих уровней вложенности. Решение: выровнять отступы внутри блока, не смешивать пробелы и табы, использовать 4 пробела на уровень.
+```
+```
+2.8 ValueError: math domain error - Корень из отрицательного числа	math.sqrt(-5)	Квадратный корень из отрицательного числа не является вещественным числом
+```
+```
+2.9 OverflowError: math range error - Ошибка OverflowError: math range error возникает, когда результат математической функции из модуля math выходит за пределы диапазона, который может представить число с плавающей запятой (тип float). Для типа int предел числа определяется кол-вом оперативной памяти, в которое оно будет записано
+```
+3. Арифметика
+```
+3.1 Умножение на 12. Используйте 4 сложения.
+    def multiply_by_12(x):
+    x2 = x + x        # 1-е сложение: x2 = 2x
+    x4 = x2 + x2      # 2-е сложение: x4 = 4x
+    x8 = x4 + x4      # 3-е сложение: x8 = 8x
+    result = x8 + x4  # 4-е сложение: result = 12x
+    return result
+```
+```
+3.2 Умножение на 16. Используйте 4 сложения.
+def multiply_by_16(x):
+    x2 = x + x        # 1-е сложение: x2 = 2x
+    x4 = x2 + x2      # 2-е сложение: x4 = 4x
+    x8 = x4 + x4      # 3-е сложение: x8 = 8x
+    x16 = x8 + x8     # 4-е сложение: x16 = 16x
+    return x16
+```
+```
+3.3 Умножение на 15. Используйте 3 сложения и 2 вычитания.
+def multiply_by_15(x):
+    x2  = x + x          # 1 сложение: 2x
+    x4  = x2 + x2        # 2 сложение: 4x
+    x8  = x4 + x4        # 3 сложение: 8x
+    x16 = x8 + x8        # 4 сложение: 16x
+    result = x16 - x     # 1 вычитание: 16x - x = 15x
+    return result        # Проверка: при x = 5: 2x = 10, 4x = 20, 8x = 40, 16x = 80, 80 − 5 = 75 = 15 × 5
+```
+```
+3.4 Добавьте к naive_mul автоматическое тестирование на случайных данных. Сравнивайте с встроенным умножением, используя конструкцию assert.
+using System;
+using System.Diagnostics;
+
+class Program
+{
+    static int NaiveMul(int x, int y)
+    {
+        int r = 0;
+        for (int i = 0; i < y; i++)
+        {
+            r = r + x;
+        }
+        return r;
+    }
+
+    static void Main()
+    {
+        Random rand = new Random();
+
+        for (int t = 0; t < 1000; t++)
+        {
+             int x = rand.Next(0, 101);   // 0..100
+             int y = rand.Next(0, 101);   // 0..100
+          
+             int expected = x * y;
+             int actual = NaiveMul(x, y);
+
+             if (actual != expected)
+             {
+                 throw new Exception($"Ошибка: {x} * {y} = {expected}, получено {actual}");
+             }
+         
+        }
+
+        Console.WriteLine("Все тесты пройдены");
+    }
+```
+```
+3.5 Реализуйте функцию fast_mul в соответствии с алгоритмом двоичного умножения в столбик (без рекурсии!). Добавьте автоматическое тестирование, как в случае с naive_mul.
+using System;
+
+class Program
+{
+    static int NaiveMul(int x, int y)
+    {
+        int r = 0;
+        for (int i = 0; i < y; i++)
+        {
+            r = r + x;
+        }
+        return r;
+    }
+
+    static int FastMul(int x, int y)
+    {
+        int result = 0;
+        while (y > 0)
+        {
+            if ((y & 1) == 1)      // если младший бит y равен 1 — проверка младшего бита. Побитовое И с 1 даёт 1, если число нечётное.
+            {
+                result = result + x;
+            }
+            x = x + x;             // x = x * 2 (сдвиг влево) — удвоение, эквивалент сдвига влево. Можно также писать x <<= 1, но x + x ближе к теме «умножение через сложение».
+            y = y >> 1;            // y = y / 2 (сдвиг вправо)
+        }
+        return result;
+    }
+
+    static void Main()
+    {
+        Random rand = new Random();
+
+        // Тестирование naive_mul
+        for (int t = 0; t < 1000; t++)
+        {
+            int x = rand.Next(0, 101);
+            int y = rand.Next(0, 101);
+
+            int expected = x * y;
+            int actual = NaiveMul(x, y);
+
+            if (actual != expected)
+            {
+                throw new Exception($"[naive_mul] Ошибка: {x} * {y} = {expected}, получено {actual}");
+            }
+        }
+        Console.WriteLine("naive_mul: все тесты пройдены");
+
+        // Тестирование fast_mul
+        for (int t = 0; t < 1000; t++)
+        {
+            int x = rand.Next(0, 101);
+            int y = rand.Next(0, 101);
+
+            int expected = x * y;
+            int actual = FastMul(x, y);
+
+            if (actual != expected)
+            {
+                throw new Exception($"[fast_mul] Ошибка: {x} * {y} = {expected}, получено {actual}");
+            }
+        }
+        Console.WriteLine("fast_mul: все тесты пройдены");
+    }
+}
 ```
