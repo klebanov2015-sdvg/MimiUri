@@ -247,3 +247,125 @@ class Program
     }
 }
 ```
+```
+3.6 Реализуйте аналогичную функцию fast_pow для возведения в степень. Решение необходимо получить только с помощью небольших модификаций предыдущего решения.
+using System;
+
+class Program
+{
+    static int NaiveMul(int x, int y)
+    {
+        int r = 0;
+        for (int i = 0; i < y; i++)
+        {
+            r = r + x;
+        }
+        return r;
+    }
+
+    static int FastMul(int x, int y)
+    {
+        int result = 0;
+        while (y > 0)
+        {
+            if ((y & 1) == 1)
+            {
+                result = result + x;
+            }
+            x = x + x;
+            y = y >> 1;
+        }
+        return result;
+    }
+
+    static int FastPow(int x, int y)
+    {
+        int result = 1;
+        while (y > 0)
+        {
+            if ((y & 1) == 1)
+            {
+                result = result * x;
+            }
+            x = x * x;
+            y = y >> 1;
+        }
+        return result;
+    }
+
+    static void Main()
+    {
+        Random rand = new Random();
+
+        // Тестирование naive_mul
+        for (int t = 0; t < 1000; t++)
+        {
+            int x = rand.Next(0, 101);
+            int y = rand.Next(0, 101);
+            int expected = x * y;
+            int actual = NaiveMul(x, y);
+            if (actual != expected)
+                throw new Exception($"[naive_mul] Ошибка: {x} * {y} = {expected}, получено {actual}");
+        }
+        Console.WriteLine("naive_mul: все тесты пройдены");
+
+        // Тестирование fast_mul
+        for (int t = 0; t < 1000; t++)
+        {
+            int x = rand.Next(0, 101);
+            int y = rand.Next(0, 101);
+            int expected = x * y;
+            int actual = FastMul(x, y);
+            if (actual != expected)
+                throw new Exception($"[fast_mul] Ошибка: {x} * {y} = {expected}, получено {actual}");
+        }
+        Console.WriteLine("fast_mul: все тесты пройдены");
+
+        // Тестирование fast_pow
+        for (int t = 0; t < 1000; t++)
+        {
+            int x = rand.Next(0, 6);    // основание 0..5
+            int y = rand.Next(0, 8);    // степень 0..7 (чтобы не было переполнения int)
+            int expected = (int)Math.Pow(x, y);
+            int actual = FastPow(x, y);
+            if (actual != expected)
+                throw new Exception($"[fast_pow] Ошибка: {x} ^ {y} = {expected}, получено {actual}");
+        }
+        Console.WriteLine("fast_pow: все тесты пройдены");
+    }
+}
+
+```
+4. Пиксельные шейдеры
+```
+4.1 Изобразите свою версию знаменитого «Черного квадрата».
+import math
+import tkinter as tk
+
+
+def draw(shader, width, height):
+    image = bytearray((0, 0, 0) * width * height)
+    for y in range(height):
+        for x in range(width):
+            pos = (width * y + x) * 3
+            color = shader(x / width, y / height)
+            normalized = [max(min(int(c * 255), 255), 0) for c in color]
+            image[pos:pos + 3] = normalized
+    header = bytes(f'P6\n{width} {height}\n255\n', 'ascii')
+    return header + image
+
+
+def main(shader):
+    label = tk.Label()
+    img = tk.PhotoImage(data=draw(shader, 256, 256)).zoom(2, 2)
+    label.pack()
+    label.config(image=img)
+    tk.mainloop()
+
+
+def shader(x, y):
+    return 0, 0, 0
+
+
+main(shader)
+```
