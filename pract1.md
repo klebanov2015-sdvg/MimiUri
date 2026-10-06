@@ -369,3 +369,46 @@ def shader(x, y):
 
 main(shader)
 ```
+```
+4.2 Изобразите шар, показанный на примере ниже.
+
+def shader(x, y):
+    dx = x - 0.5
+    dy = y - 0.5
+    d = math.hypot(dx, dy)
+
+    # Маска круга: 1 внутри, 0 снаружи, с плавным краем
+    mask = max(0.0, 1.0 - d * 2.0)
+
+    # Градиент: красный растёт вправо-вниз, зелёный — влево-вверх
+    r = mask * (x + y) / 2
+    g = mask * (1.0 - (x + y) / 2)
+    b = 0.0
+
+    return r, g, b
+```
+```
+Билеты 1 и 2. Решение
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace HelloWorld
+{
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+//Задние 1.Выведите на экран текст: Информатика — наука об информации.
+
+	Console.WriteLine("Информатика - наука об информации");
+// Задние 2. Пользователь вводит число килобайт. Выведите, сколько это байт (1 Кбайт = 1024 байт).
+
+    int kilobyte = int.Parse(Console.ReadLine());
+    int bytes = kilobyte * 1024;
+    Console.WriteLine($"Вы ввели {kilobyte} килобайт. Это - {bytes} байт.");
+		}
+	}
+}
+```
